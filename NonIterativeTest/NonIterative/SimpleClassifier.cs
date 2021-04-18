@@ -39,7 +39,7 @@ namespace NonIterative
         public Vector ClassifyProbVector(Vector inp)
         {
             double[] probs = new double[numCl];
-            Parallel.For(0,numCl, i => probs[i] = ScalarProduct(inp - meanX, w[i]));
+            Parallel.For(0,numCl, i => probs[i] = ScalarProduct(inp - meanX, w[i])); 
             return Softmax(probs);
         }
 
@@ -58,15 +58,16 @@ namespace NonIterative
             Vector[] classesV = new Vector[classes.Length];
             int maxInd = numCl - 1;
             Vector[] featuresV = new Vector[inpDim], classesVects = new Vector[numCl];
-            Vector dispX = Statistic.EnsembleDispersion(features)+1e-10;
+            Vector dispX = Statistic.EnsembleDispersion(features)+1e-10; // Определение важности признака
+            Vector stdX = dispX.TransformVector(Math.Sqrt); 
             meanX = Vector.Mean(features);
 
 
             for (int i = 0; i < classes.Length; i++) 
-                classesV[i] = Vector.OneHotBePol(classes[i], maxInd);
+                classesV[i] = Vector.OneHotBePol(classes[i], maxInd); // Подготовка меток класса
 
             for (int i = 0; i < inpDim; i++)
-                featuresV[i] = (features.GetDimention(i));
+                featuresV[i] = features.GetDimention(i);
 
             for (int i = 0; i < numCl; i++)
                 classesVects[i] = classesV.GetDimention(i);
@@ -75,9 +76,9 @@ namespace NonIterative
             Parallel.For(0, numCl, i =>
             {
                 for (int j = 0; j < inpDim; j++)
-                    w[i][j] = Statistic.CorrelationCoefficient(featuresV[j], classesVects[i]) / dispX[j];
+                    w[i][j] = Statistic.CorrelationCoefficient(featuresV[j], classesVects[i]);
 
-                w[i] = w[i].GetUnitVector();
+                w[i] = (w[i] / stdX).GetUnitVector() / dispX; // Нормализация по важности признаков
             });
         }
 
