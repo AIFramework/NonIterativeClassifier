@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="AI, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\NonIterative\bin\Release\AI.dll</HintPath>
+      <HintPath>..\NonIterative\bin\Debug\AI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

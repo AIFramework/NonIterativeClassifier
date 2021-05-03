@@ -3,6 +3,7 @@ using AI.DataStructs;
 using AI.ML.AlgorithmAnalysis;
 using AI.ML.Classifiers;
 using AI.ML.Datasets;
+using AI.ML.NeuralNetwork.CoreNNW.Layers;
 using NonIterative;
 using System;
 using System.Collections.Generic;
@@ -34,15 +35,32 @@ namespace NonIterativeTest
             Stopwatch stopwatch = new Stopwatch();
 
 
-            stopwatch.Start(); // Цикл на 1000 итераций нужен только для точности замера времени, в реальной работе следует его убрать
-            for(int i = 0; i<1000; i++) classifier.Train(vectorClasses); // Обучение
+            stopwatch.Start(); // Цикл на 100 итераций нужен только для точности замера времени, в реальной работе следует его убрать
+            for (int i = 0; i < 100; i++) classifier.Train(vectorClasses); // Обучение
             stopwatch.Stop();
-            Console.WriteLine($"Время обучения: {stopwatch.ElapsedMilliseconds /(1000.0* 1000.0)} сек");
+            Console.WriteLine($"Время обучения: {stopwatch.ElapsedMilliseconds / (1000.0 * 100.0)} сек");
+
+            //classifier.Train(vectorClasses); // Обучение
 
             Console.WriteLine("=====================================================".ToUpper());
             Console.WriteLine("\n\n===== Безытеративный классификатор ===== \n\n\n".ToUpper());
             Console.WriteLine("=====================================================".ToUpper());
             
+            Test(test); // Тестирование
+
+
+
+            Console.WriteLine("\n\n\nКонвертирование в нейросеть".ToUpper());
+            Console.WriteLine("=====================================================".ToUpper());
+            classifier = new NeuralClassifier((classifier as SimpleClassifier).GetNetwork() as NNW) { EpochNum = 3};
+            Test(test); // Тестирование
+
+
+            Console.WriteLine("\n\n\n Тюнинг методом Adam".ToUpper());
+            Console.WriteLine("=====================================================".ToUpper());
+            Console.WriteLine("\n\n");
+            classifier.Train(vectorClasses);
+            Console.WriteLine("\n\n");
             Test(test); // Тестирование
         }
 
