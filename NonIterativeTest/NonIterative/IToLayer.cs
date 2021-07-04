@@ -1,4 +1,5 @@
-﻿using AI.ML.NeuralNetwork.CoreNNW.Layers;
+﻿using AI.ML.NeuralNetwork.CoreNNW;
+using AI.ML.NeuralNetwork.CoreNNW.Layers.Base;
 
 namespace NonIterative
 {
